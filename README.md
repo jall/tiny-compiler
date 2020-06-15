@@ -1,6 +1,6 @@
 # Tiny compiler
 
-https://travis-ci.org/jall/tiny-compiler.svg?branch=master
+![](https://travis-ci.org/jall/tiny-compiler.svg?branch=master)
 
 A tiny compiler for a lisp-style language, written in Clojure
 
