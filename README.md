@@ -1,6 +1,8 @@
 # Tiny compiler
 
-This will be a tiny compiler, for a lisp-style language, written in Clojure
+https://travis-ci.org/jall/tiny-compiler.svg?branch=master
+
+A tiny compiler for a lisp-style language, written in Clojure
 
 ## To do
 
