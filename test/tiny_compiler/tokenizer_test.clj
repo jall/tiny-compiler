@@ -5,32 +5,36 @@
 
 (deftest tokenizer-test
   (testing "tokenizer returns a sequence of tokens given valid input"
-    (is (= (tokenizer "(+ 1 1)") '({:symbol :brace-left} {:symbol :plus} {:int 1} {:int 1} {:symbol :brace-right})))))
+    (is (= (tokenizer "(+ 1 1)") '({:type :form :value :brace-left}
+                                   {:type :form :value :plus}
+                                   {:type :int :value 1}
+                                   {:type :int :value 1}
+                                   {:type :form :value :brace-right})))))
 
 
 (deftest take-int-test
   (testing "take-int returns sane output"
-    (is (= (take-int "234") ["" {:int 234}]))
-    (is (= (take-int "1 + 0") [" + 0" {:int 1}]))
-    (is (= (take-int "001 + 002") [" + 002" {:int 1}]))
-    (is (= (take-int "876 + 152") [" + 152" {:int 876}])))
+    (is (= (take-int "234") ["" {:type :int :value 234}]))
+    (is (= (take-int "1 + 0") [" + 0" {:type :int :value 1}]))
+    (is (= (take-int "001 + 002") [" + 002" {:type :int :value 1}]))
+    (is (= (take-int "876 + 152") [" + 152" {:type :int :value 876}])))
 
   (testing "take-int returns nil when the next tokens are not ints"
     (is (= (take-int "(+ 1 1)") nil))
     (is (= (take-int "(((+)))") nil))))
 
 
-(deftest take-sym-test
-  (testing "take-sym recognises all the symbols it should"
-    (is (= (take-sym "(") ["" {:symbol :brace-left}]))
-    (is (= (take-sym ")") ["" {:symbol :brace-right}]))
-    (is (= (take-sym "+") ["" {:symbol :plus}]))
-    (is (= (take-sym "-") ["" {:symbol :minus}]))
-    (is (= (take-sym "/") ["" {:symbol :slash}]))
-    (is (= (take-sym "*") ["" {:symbol :star}])))
+(deftest take-form-test
+  (testing "take-form recognises all the symbols it should"
+    (is (= (take-form "(") ["" {:type :form :value :brace-left}]))
+    (is (= (take-form ")") ["" {:type :form :value :brace-right}]))
+    (is (= (take-form "+") ["" {:type :form :value :plus}]))
+    (is (= (take-form "-") ["" {:type :form :value :minus}]))
+    (is (= (take-form "/") ["" {:type :form :value :slash}]))
+    (is (= (take-form "*") ["" {:type :form :value :star}])))
 
-  (testing "take-sym returns sane output"
-    (is (= (take-sym "(+ 1 1)") ["+ 1 1)" {:symbol :brace-left}])))
+  (testing "take-form returns sane output"
+    (is (= (take-form "(+ 1 1)") ["+ 1 1)" {:type :form :value :brace-left}])))
 
-  (testing "take-sym returns nil when the next tokens are not ints"
-    (is (= (take-sym "123") nil))))
+  (testing "take-form returns nil when the next tokens are not symbols"
+    (is (= (take-form "123") nil))))
